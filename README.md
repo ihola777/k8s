@@ -12,6 +12,6 @@ This is a guide on how to start kubernetes journey. To learn more about kubernet
 - ### Guides:
   - [Installation](./guides/installation.md)
 
-- ### YAML:
+- ### YAMLs:
   
 - ### Troubleshooting:
