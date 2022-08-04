@@ -3,7 +3,7 @@
 - Debian 10 buster
 - 2 cores | 2G memory | 20G HD
 
-1. Prepare
+1. Preperation
 - swap off
   ```
   # check swap status
@@ -110,7 +110,7 @@
   docker rmi registry.aliyuncs.com/google_containers/$imageName
   done
   ```
-  
+
 4. Finish setup
 - system init
   ```
