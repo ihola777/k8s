@@ -16,4 +16,4 @@
 - ### YAMLs:
   
 - ### Troubleshooting:
-  [Errors](./setup/errors.md)
+  - [Errors](./setup/errors.md)
