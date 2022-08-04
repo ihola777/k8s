@@ -11,7 +11,7 @@
 - ### Guides:
   This is a guide on how to start kubernetes journey. To learn more about kubernetes, check out the [kubernetes Docs](https://kubernetes.io/docs/home/)
 
-  - [Installation](./guides/installation.md)
+  - [Installation](./setup/installation.md)
 
 - ### YAMLs:
   
