@@ -142,7 +142,7 @@
      source .bashrc
      ```
    - install pod network plugins
-     [calico](https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/onpremises)
+     - [calico](https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/onpremises)
      ```
      #less than 50 nodes
      kubectl apply -f https://projectcalico.docs.tigera.io/manifests/calico.yaml
