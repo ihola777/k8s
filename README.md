@@ -16,3 +16,4 @@
 - ### YAMLs:
   
 - ### Troubleshooting:
+  [Errors](errors.md)
