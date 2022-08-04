@@ -74,7 +74,8 @@
   sudo systectl daemon-reload
   sudo systemctl restart docker
   ```
-1. Install kubernetes
+
+3. Install kubernetes
 - install components 
   ```
   # replace kubernetes repo link to meet your location
@@ -109,6 +110,7 @@
   docker rmi registry.aliyuncs.com/google_containers/$imageName
   done
   ```
+  
 4. Finish setup
 - system init
   ```
