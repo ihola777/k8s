@@ -1,4 +1,4 @@
-# ERRORS
+# Errors & Exceptions
 Message:
 ```
 [preflight] Running pre-flight checks
