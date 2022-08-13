@@ -3,7 +3,7 @@
 - Debian 10 buster
 - 2 cores | 2G memory | 20G HD
 
-1. Preperation
+1. Preperation on all nodes
    - swap off
      ```
      # check swap status
@@ -52,11 +52,11 @@
      sudo apt autoremove --purge
      ```
 
-2. Install docker
+2. Install docker on all nodes
    - alternative options: [docker](https://docs.docker.com/engine/install/)
      ```
      curl -fsSL https://get.docker.com -o get-docker.sh
-     sudo sh get-docker.sh
+     sudo sh get-docker.sh --mirror Aliyun
      ```
      ```
      # additional steps you may concern
@@ -75,19 +75,21 @@
      sudo systemctl restart docker
      ```
 
-3. Install kubernetes
+3. Install kubernetes on all nodes
    - install components 
      ```
      # replace kubernetes repo link to meet your location
-     sudo curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
-     sudo echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
-     sudo apt update
-     sudo apt install -y kubelet kubeadm kubectl
+     su -
+     curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+     echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
+     apt update
+     apt install -y kubelet kubeadm kubectl
 
      # hold the verions
-     sudo apt-mart hold kubelet kubeadm kubectl
+     apt-mark hold kubelet kubeadm kubectl
+     exit
      ```
-   - pull images
+   - pull images on master nodes
      ```
      # check the version
      kubeadm config images list
@@ -95,7 +97,7 @@
      ```
      # download the images via shell script
      #!/bin/bash
-     images = (
+     images=(
        kube-apiserver:v1.24.1
        kube-controller-manager:v1.24.1
        kube-scheduler:v1.24.1
@@ -112,7 +114,7 @@
      ```
 
 4. Finish setup
-   - system init
+   - system init on master node
      ```
      sudo kubeadm init
      --apiserver-advertise-address=192.168.1.240 \ #optional
@@ -135,23 +137,32 @@
 
      # copy configurations to nodes
      # replace user@ip below
-     scp $HOME/.kube/config user@ip $HOME/.kube/config
+     scp $HOME/.kube/config user@ip:$HOME/.kube/config
 
      # import profile on nodes
      sudo echo "export KUBECONFIG=$HOME/.kube/config" >> $HOME/.bashrc
      source .bashrc
      ```
-   - install pod network plugins
+   - install pod network plugins on all nodes
      - [calico](https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/onpremises)
      ```
      #less than 50 nodes
      kubectl apply -f https://projectcalico.docs.tigera.io/manifests/calico.yaml
      sudo reboot
      ```
-   - join the network
+   - join to cluster
      ```
-     # replace masterIP below
-     # to get the token: kubeadm config print
-     sudo kubeadm join masterIP:6443 --token kpd70f.cqydbjn21911u8rb \
-           --discovery-token-ca-cert-hash sha256:50e4247d4a3663a75f461347bb8497d123492864cc851b37a6e6f289fe6507d0
+     #to get the token: 
+     kubeadm token list
+
+     #to create a new token: 
+     kubeadm token create
+     
+     #to request --discovery-token-ca-cert-hash
+     openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | \ openssl dgst -sha256 -hex | sed 's/^.* //'
+
+     #replace $masterIP/$TOKEN/$HASH below
+     su -
+     kubeadm join $masterIP:6443 --token $TOKEN \
+           --discovery-token-ca-cert-hash $HASH
      ```
